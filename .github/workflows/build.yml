@@ -16,7 +16,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python 3.10
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
@@ -24,29 +24,52 @@ jobs:
       - name: Install System Dependencies
         run: |
           sudo apt-get update -y
-          DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
-            build-essential libsqlite3-dev sqlite3 bzip2 libbz2-dev \
-            zlib1g-dev libssl-dev openssl libgdbm-dev libgdbm-compat-dev liblzma-dev \
-            libreadline-dev libffi-dev libgl1-mesa-dev libgles2-mesa-dev ccache git \
-            ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev \
-            libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev \
-            openjdk-17-jdk unzip zip autoconf libtool pkg-config
+          DEBIAN_FRONTEND=noninteractive sudo apt-get install -y \
+            build-essential git zip unzip openjdk-17-jdk \
+            python3-dev autoconf libtool pkg-config \
+            libffi-dev libssl-dev libsqlite3-dev \
+            libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev \
+            ccache wget curl
           sudo apt-get clean
           sudo rm -rf /var/lib/apt/lists/*
 
-      - name: Install Python Tools
+      - name: Setup Android SDK/NDK
         run: |
-          python -m pip install --upgrade pip setuptools
-          pip install "Cython<3.0.0" buildozer
+          mkdir -p $HOME/.buildozer
+          echo "android_api = 33" >> ~/.buildozer/buildozer.ini
+          echo "android_minapi = 21" >> ~/.buildozer/buildozer.ini
+          echo "android_ndk = 25b" >> ~/.buildozer/buildozer.ini
 
-      - name: Build APK with Auto License Accept
+      - name: Install Python Dependencies
         run: |
-          yes | buildozer -v android debug
+          python -m pip install --upgrade pip wheel setuptools
+          pip install Cython==0.29.35 buildozer pyjnius kivy
 
-      - name: Upload APK
+      - name: Build APK
+        run: |
+          # Agar buildozer.spec hai to use karo, nahi to error handle karo
+          if [ ! -f buildozer.spec ]; then
+            echo "buildozer.spec nahi milya! Tumhain ye file add karni padegi."
+            exit 1
+          fi
+          yes | buildozer -v android debug 2>&1 | tail -50
+        continue-on-error: false
+
+      - name: Upload APK Artifact
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: PK786-Casino-APK
           path: bin/*.apk
+          retention-days: 30
 
+      - name: Show Build Status
+        run: |
+          if [ -f bin/*.apk ]; then
+            echo "✅ APK Successfully Built!"
+            ls -lh bin/*.apk
+          else
+            echo "❌ APK Build Failed"
+            exit 1
+          fi
 
