@@ -8,6 +8,7 @@ version = 1.0.0
 
 requirements = python3,kivy==2.3.0,requests,urllib3,certifi,idna,charset-normalizer
 
+
 orientation = portrait
 fullscreen = 0
 
