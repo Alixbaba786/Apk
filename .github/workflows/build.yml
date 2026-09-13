@@ -11,6 +11,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 120
 
     steps:
       - name: Checkout Code
@@ -24,52 +25,51 @@ jobs:
       - name: Install System Dependencies
         run: |
           sudo apt-get update -y
-          DEBIAN_FRONTEND=noninteractive sudo apt-get install -y \
-            build-essential git zip unzip openjdk-17-jdk \
-            python3-dev autoconf libtool pkg-config \
-            libffi-dev libssl-dev libsqlite3-dev \
+          DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
+            build-essential git zip unzip \
+            openjdk-17-jdk openjdk-17-jdk-headless \
+            python3-dev python3-venv \
+            autoconf automake libtool libtoolize m4 \
+            pkg-config libffi-dev libssl-dev \
+            libsqlite3-dev sqlite3 libbz2-dev zlib1g-dev \
+            libreadline-dev libgdbm-dev libgdbm-compat-dev liblzma-dev \
+            libncurses5-dev libncursesw5-dev \
             libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev \
-            ccache wget curl
+            ccache wget curl git-core
           sudo apt-get clean
           sudo rm -rf /var/lib/apt/lists/*
 
-      - name: Setup Android SDK/NDK
+      - name: Setup Java Home
         run: |
-          mkdir -p $HOME/.buildozer
-          echo "android_api = 33" >> ~/.buildozer/buildozer.ini
-          echo "android_minapi = 21" >> ~/.buildozer/buildozer.ini
-          echo "android_ndk = 25b" >> ~/.buildozer/buildozer.ini
+          echo "JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64" >> $GITHUB_ENV
 
-      - name: Install Python Dependencies
+      - name: Upgrade pip and install Python tools
         run: |
           python -m pip install --upgrade pip wheel setuptools
-          pip install Cython==0.29.35 buildozer pyjnius kivy
+          pip install cython==0.29.35 buildozer
 
       - name: Build APK
         run: |
-          # Agar buildozer.spec hai to use karo, nahi to error handle karo
-          if [ ! -f buildozer.spec ]; then
-            echo "buildozer.spec nahi milya! Tumhain ye file add karni padegi."
-            exit 1
-          fi
-          yes | buildozer -v android debug 2>&1 | tail -50
-        continue-on-error: false
-
+          echo "Starting APK build..."
+          yes | buildozer -v android debug
+          
       - name: Upload APK Artifact
-        if: success()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: PK786-Casino-APK
           path: bin/*.apk
+          if-no-files-found: ignore
           retention-days: 30
 
-      - name: Show Build Status
+      - name: Build Status
+        if: always()
         run: |
           if [ -f bin/*.apk ]; then
-            echo "✅ APK Successfully Built!"
+            echo "✅ APK BUILD SUCCESS!"
             ls -lh bin/*.apk
           else
-            echo "❌ APK Build Failed"
+            echo "❌ APK build failed"
             exit 1
           fi
 
