@@ -9,39 +9,42 @@ package.name = royalchess
 # (str) Package domain (needed for android/ios packaging)
 package.domain = com.royal.chess
 
-# (str) Source code where the main.py live
+# (str) Source code where the main.py lives
 source.dir = .
 
-# (list) Source files to include (let empty to include all the files)
+# (list) Source files to include
 source.include_exts = py,png,jpg,kv,atlas,json
 
 # (str) Application versioning
 version = 1.0.0
 
 # (list) Application requirements
-# comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,python-chess
+# Fix: Exact versions specified to prevent Cython/Kivy build failures
+requirements = python3,kivy==2.3.0,python-chess
 
-# (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
+# (str) Supported orientation
 orientation = portrait
 
-# (bool) Indicate if the application should be fullscreen or not
+# (bool) Indicate if the application should be fullscreen
 fullscreen = 0
 
 # (list) Permissions
 android.permissions = INTERNET, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, POST_NOTIFICATIONS
 
-# (int) Target Android API, should be as high as possible.
+# (int) Target Android API
 android.api = 33
 
-# (int) Minimum API your APK will support.
+# (int) Minimum API your APK will support
 android.minapi = 21
 
-# (int) Android SDK version to use
+# (int) Android SDK version
 android.sdk = 33
 
-# (str) Android NDK version to use
+# (str) Android NDK version
 android.ndk = 25.2.9519653
+
+# (bool) Auto-accept Android SDK licenses (Prevents GitHub Action hangs/failures)
+android.accept_sdk_license = True
 
 # (bool) Use --private data dir (True), or --dir public storage (False)
 android.private_storage = True
@@ -55,7 +58,7 @@ android.copy_libs = 1
 # (str) The Android arch to build for
 android.archs = arm64-v8a, armeabi-v7a
 
-# (bool) Enable AndroidX support. Required when targeting API 28+
+# (bool) Enable AndroidX support
 android.enable_androidx = True
 
 [buildozer]
@@ -63,5 +66,6 @@ android.enable_androidx = True
 # (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
 log_level = 2
 
-# (int) Display warning if buildozer is run as root (0 = error, 1 = warning)
+# (int) Display warning if buildozer is run as root
 warn_on_root = 1
+
