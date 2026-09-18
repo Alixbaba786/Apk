@@ -19,7 +19,7 @@ source.include_exts = py,png,jpg,kv,atlas,json
 version = 1.0.0
 
 # (list) Application requirements
-requirements = python3==3.11.8,kivy==2.3.0,python-chess
+requirements = python3==3.11.8,hostpython3==3.11.8,kivy==2.3.0,python-chess
 
 # (str) Supported orientation
 orientation = portrait
