@@ -22,24 +22,24 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev ccache
-          pip install --upgrade pip
-          pip install buildozer "Cython>=3.0.0" virtualenv
+          pip install --upgrade pip setuptools wheel
+          pip install buildozer "cython==0.29.33" virtualenv
 
       - name: Cache Buildozer global directory
         uses: actions/cache@v4
         with:
-          path: .buildozer_global
-          key: buildozer-global-${{ hashFiles('buildozer.spec') }}
+          path: ~/.buildozer
+          key: ${{ runner.os }}-buildozer-global-${{ hashFiles('buildozer.spec') }}
           restore-keys: |
-            buildozer-global-
+            ${{ runner.os }}-buildozer-global-
 
-      - name: Cache Buildozer directory
+      - name: Cache Buildozer local directory
         uses: actions/cache@v4
         with:
           path: .buildozer
-          key: ${{ runner.os }}-buildozer-${{ hashFiles('buildozer.spec') }}
+          key: ${{ runner.os }}-buildozer-local-${{ hashFiles('buildozer.spec') }}
           restore-keys: |
-            ${{ runner.os }}-buildozer-
+            ${{ runner.os }}-buildozer-local-
 
       - name: Build with Buildozer
         run: |
@@ -50,6 +50,7 @@ jobs:
         with:
           name: App-APK
           path: bin/*.apk
+
 
 
 
