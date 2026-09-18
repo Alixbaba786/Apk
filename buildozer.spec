@@ -1,25 +1,26 @@
 [app]
+
 # (str) Title of your application
-title = My Application
+title = Royal 3D Chess
 
 # (str) Package name
-package.name = myapp
+package.name = chessapp
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.test
+package.domain = org.royalchess
 
 # (str) Source code where the main.py lives
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,jpg,kv,atlas
+source.include_exts = py,png,jpg,kv,atlas,json
 
 # (str) Application versioning
-version = 0.1
+version = 1.0.0
 
 # (list) Application requirements
-# Yahan Kivy ka version 2.2.1 fix kiya hai taaki Cython 0.29.33 ke saath perfect match ho
-requirements = python3,kivy==2.2.1
+# Python-chess include kar diya gaya hai taaki import chess crash na ho
+requirements = python3,kivy==2.3.0,python-chess
 
 # (str) Supported orientations (landscape, portrait or all)
 orientation = portrait
@@ -30,12 +31,12 @@ fullscreen = 0
 # --- Android specific ---
 
 # (list) Permissions
-# android.permissions = INTERNET
+android.permissions = INTERNET, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
 
-# (int) Target Android API, should be as high as possible.
+# (int) Target Android API
 android.api = 33
 
-# (int) Minimum API your APK will support.
+# (int) Minimum API your APK will support
 android.minapi = 21
 
 # (str) Android NDK version to use
@@ -47,18 +48,19 @@ android.skip_update = False
 # (bool) If True, then automatically accept SDK license agreements
 android.accept_sdk_license = True
 
-# (str) The Android arch to build for, choices: armeabi-v7a, arm64-v8a, x86, x86_64
-# Sirf arm64-v8a aur armeabi-v7a rakha hai taaki build fast ho aur sabhi modern phones par chale
+# (str) The Android arch to build for
 android.archs = arm64-v8a, armeabi-v7a
 
-# (bool) enables Android auto backups (Android 6.0+)
+# (bool) enables Android auto backups
 android.allow_backup = True
 
 [buildozer]
+
 # (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
 log_level = 2
 
 # (int) Display warning if buildozer is run as root (0 = False, 1 = True)
 warn_on_root = 1
+
 
 
