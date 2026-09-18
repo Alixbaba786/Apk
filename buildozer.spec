@@ -19,8 +19,8 @@ source.include_exts = py,png,jpg,kv,atlas,json
 version = 1.0.0
 
 # (list) Application requirements
-# Python-chess include kar diya gaya hai taaki import chess crash na ho
-requirements = python3,kivy==2.3.0,python-chess
+# Fix: Buildozer me module name 'chess' hota hai (python-chess nahi)
+requirements = python3,kivy==2.2.1,chess
 
 # (str) Supported orientations (landscape, portrait or all)
 orientation = portrait
