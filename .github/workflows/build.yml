@@ -43,13 +43,14 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          yes | buildozer android debug
+          buildozer android debug > build_log.txt 2>&1 || { echo "BUILD FAILED! Showing last 150 lines:"; tail -n 150 build_log.txt; exit 1; }
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: App-APK
           path: bin/*.apk
+
 
 
 
