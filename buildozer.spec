@@ -20,7 +20,7 @@ version = 1.0.0
 
 # (list) Application requirements
 # Fix: Buildozer me module name 'chess' hota hai (python-chess nahi)
-requirements = python3,kivy==2.2.1,chess
+requirements = python3==3.11.4,kivy==2.3.0,chess
 
 # (str) Supported orientations (landscape, portrait or all)
 orientation = portrait
@@ -57,7 +57,7 @@ android.allow_backup = True
 [buildozer]
 
 # (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
-log_level = 2
+log_level = 1
 
 # (int) Display warning if buildozer is run as root (0 = False, 1 = True)
 warn_on_root = 1
