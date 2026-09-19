@@ -15,10 +15,9 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          # Updated dependencies for Ubuntu 24.04 (Removed libtinfo5, changed to libncurses-dev)
-          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses-dev cmake libffi-dev libssl-dev
+          # Added libltdl-dev to fix the autoconf macro error (LT_SYS_SYMBOL_USCORE)
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool libltdl-dev pkg-config zlib1g-dev libncurses-dev cmake libffi-dev libssl-dev
           
-          # Added --break-system-packages to bypass Ubuntu 24.04 pip restriction
           pip3 install --user --upgrade buildozer cython virtualenv --break-system-packages
 
       - name: Build APK with Buildozer
@@ -31,4 +30,5 @@ jobs:
         with:
           name: game-apk
           path: bin/*.apk
+
 
