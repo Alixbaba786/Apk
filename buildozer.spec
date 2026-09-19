@@ -10,7 +10,7 @@ version = 1.0
 requirements = python3,kivy,android
 
 # Screen orientation aur full screen settings
-orientation = sensor
+orientation = landscape
 fullscreen = 1
 
 # Internet permission ke bina blank white screen ayegi
