@@ -12,6 +12,7 @@ requirements = python3,kivy,android
 # Screen orientation aur full screen settings
 orientation = landscape
 fullscreen = 1
+android.accept_sdk_license = True
 
 # Internet permission ke bina blank white screen ayegi
 android.permissions = INTERNET
